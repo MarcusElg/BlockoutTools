@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Vector3Extensions : MonoBehaviour
+public static class Vector3Extensions
 {
-    // Start is called before the first frame update
-    void Start()
+    public static Vector3 ToXZ (Vector3 input)
     {
-        
+        return new Vector3(input.x, 0, input.z);
     }
 
-    // Update is called once per frame
-    void Update()
+    public static float XZDistance (Vector3 one, Vector3 two)
     {
-        
+        return Vector3.Distance(ToXZ(one), ToXZ(two));
     }
 }
