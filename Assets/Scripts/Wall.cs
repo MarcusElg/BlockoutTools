@@ -48,7 +48,7 @@ public class Wall : MonoBehaviour
 
         for (int i = 0; i < spline.KnotCount; i++)
         {
-            Vector3 left = (Quaternion)knots[i].Rotation * ((((Vector3)knots[i].TangentIn).normalized + ((Vector3)knots[i].TangentOut).normalized) / 2).normalized;
+            Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
             int nextIndex = (i + 1) % spline.KnotCount;
 
             if (spline.Closed)
