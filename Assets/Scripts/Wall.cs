@@ -7,6 +7,8 @@ public class Wall : MonoBehaviour
 
     // Properties
     public float height = 5;
+    public float thickness = 1;
+    public float uvScaling = 1;
 
     // Internal
     bool setup = false;
@@ -42,20 +44,50 @@ public class Wall : MonoBehaviour
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
 
+        float currentDistance = 0;
+
         for (int i = 0; i < spline.KnotCount; i++)
         {
-            // Add vertices
-            vertices.Add(knots[i].Position);
-            vertices.Add((Vector3)knots[i].Position + Vector3.up * height);
+            Vector3 left = (Quaternion)knots[i].Rotation * ((((Vector3)knots[i].TangentIn).normalized + ((Vector3)knots[i].TangentOut).normalized) / 2).normalized;
+            int nextIndex = (i + 1) % spline.KnotCount;
 
-            // Add triangles
+            if (spline.Closed)
+            {
+                nextIndex = (i + 1) % (spline.KnotCount + 1); // Extra vertex at end
+            }
+
+            // Add vertices ::
+            Vector3 leftPosition = (Vector3)knots[i].Position + left * thickness;
+            Vector3 rightPosition = (Vector3)knots[i].Position - left * thickness;
+            vertices.Add(leftPosition); // Lower left
+            vertices.Add(rightPosition); // Lower right
+            vertices.Add(rightPosition + Vector3.up * height); // Upper right
+            vertices.Add(leftPosition + Vector3.up * height); // Upper left
+
+            // Add triangles =
             if (i < spline.KnotCount - 1 || spline.Closed)
             {
-                int nextIndex = (i + 1) % spline.KnotCount;
-                Debug.Log(nextIndex);
-                MeshTools.AddSquare(ref triangles, nextIndex * 2, nextIndex * 2 + 1, i * 2, i * 2 + 1);
+                MeshTools.ConnectToNextIteration(ref triangles, i, nextIndex, 4);
             }
+
+            // Add uvs
+            uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, height) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
+
+            // Update for next iteration
+            currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.KnotCount].Position);
         }
+
+        // Add extra vertices to prevent uv stretching
+        vertices.AddRange(vertices.GetRange(0, 4));
+
+        // Add extra uvs
+        uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
+        uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
+        uvs.Add(new Vector2(currentDistance, height) / uvScaling);
+        uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
 
         CreateMesh(vertices, triangles, uvs);
     }

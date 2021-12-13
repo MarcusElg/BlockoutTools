@@ -12,6 +12,13 @@ public class WallEditor : Editor
     {
         wall = (Wall)target;
         wall.Setup();
+
+        wall.GetComponent<SplineContainer>().Spline.changed += wall.Generate;
+    }
+
+    private void OnDisable()
+    {
+        wall.GetComponent<SplineContainer>().Spline.changed -= wall.Generate;
     }
 
     public void OnSceneGUI()
@@ -21,9 +28,10 @@ public class WallEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        EditorGUI.BeginChangeCheck();
         base.OnInspectorGUI();
 
-        if (GUILayout.Button("Generate"))
+        if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
         {
             wall.Generate();
         }
@@ -31,6 +39,6 @@ public class WallEditor : Editor
 
     private void Draw()
     {
-        
+
     }
 }
