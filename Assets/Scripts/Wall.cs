@@ -44,7 +44,7 @@ public class Wall : MonoBehaviour
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
 
-        float currentDistance = 0;
+        float currentDistance = 0.02f; // Not zero as that creates flat texture on cap
 
         for (int i = 0; i < spline.KnotCount; i++)
         {
