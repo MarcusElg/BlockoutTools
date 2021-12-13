@@ -70,6 +70,19 @@ public class Wall : MonoBehaviour
                 MeshTools.ConnectToNextIteration(ref triangles, i, nextIndex, 4);
             }
 
+            // Add cap triangles
+            if (!spline.Closed && (i == 0 || i == spline.KnotCount - 1))
+            {
+                if (i == 0)
+                {
+                    MeshTools.AddFollowingSquare(ref triangles, i * 4);
+                }
+                else
+                {
+                    MeshTools.AddPreceedingSquare(ref triangles, i * 4 + 3);
+                }
+            }
+
             // Add uvs
             uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
             uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
@@ -80,14 +93,17 @@ public class Wall : MonoBehaviour
             currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.KnotCount].Position);
         }
 
-        // Add extra vertices to prevent uv stretching
-        vertices.AddRange(vertices.GetRange(0, 4));
+        if (spline.Closed)
+        {
+            // Add extra vertices to prevent uv stretching
+            vertices.AddRange(vertices.GetRange(0, 4));
 
-        // Add extra uvs
-        uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
-        uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
-        uvs.Add(new Vector2(currentDistance, height) / uvScaling);
-        uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
+            // Add extra uvs
+            uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, height) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
+        }
 
         CreateMesh(vertices, triangles, uvs);
     }

@@ -16,10 +16,16 @@ public static class MeshTools
         AddSquare(ref triangles, startIndex, startIndex + 1, startIndex + 2, startIndex + 3);
     }
 
+    // Uses a index and the preceeding three to create a square
+    public static void AddPreceedingSquare(ref List<int> triangles, int startIndex)
+    {
+        AddSquare(ref triangles, startIndex, startIndex - 1, startIndex - 2, startIndex - 3);
+    }
+
     public static void AddSquare(ref List<int> triangles, int indexOne, int indexTwo, int indexThree, int indexFour)
     {
-        AddTriangle(ref triangles, indexOne, indexTwo, indexThree);
-        AddTriangle(ref triangles, indexTwo, indexFour, indexThree);
+        AddTriangle(ref triangles, indexOne, indexThree, indexTwo);
+        AddTriangle(ref triangles, indexOne, indexFour, indexThree);
     }
 
     public static void ConnectToNextIteration(ref List<int> triangles, int currentIndex, int nextIndex, int countPerIteration)
@@ -27,7 +33,7 @@ public static class MeshTools
         for (int i = 0; i < countPerIteration; i++)
         {
             int nextI = (i + 1) % countPerIteration;
-            AddSquare(ref triangles, currentIndex * countPerIteration + i, currentIndex * countPerIteration + nextI, nextIndex * countPerIteration + i, nextIndex * countPerIteration + nextI);
+            AddSquare(ref triangles, nextIndex * countPerIteration + i, nextIndex * countPerIteration + nextI, currentIndex * countPerIteration + nextI, currentIndex * countPerIteration + i);
         }
     }
 }
