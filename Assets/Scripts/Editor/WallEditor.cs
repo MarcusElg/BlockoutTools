@@ -17,11 +17,13 @@ public class WallEditor : Editor
         wall.Setup();
 
         wall.GetComponent<SplineContainer>().Spline.changed += wall.Generate;
+        Undo.undoRedoPerformed += wall.Generate;
     }
 
     private void OnDisable()
     {
         wall.GetComponent<SplineContainer>().Spline.changed -= wall.Generate;
+        Undo.undoRedoPerformed += wall.Generate;
         setupCompleted = false;
     }
 
