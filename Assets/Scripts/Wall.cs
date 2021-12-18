@@ -31,6 +31,12 @@ public class Wall : MonoBehaviour
 
     public void Validate()
     {
+        // Validate properties
+        height = Mathf.Clamp(height, 0.5f, 10);
+        thickness = Mathf.Clamp(thickness, 0.1f, 2.5f);
+        uvScaling = Mathf.Clamp(uvScaling, 0.1f, 10f);
+
+        // Validate spline
         SplineContainer splineContainer = GetComponent<SplineContainer>();
         splineContainer.Spline.EditType = SplineType.Linear;
     }
