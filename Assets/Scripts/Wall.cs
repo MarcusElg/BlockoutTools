@@ -20,7 +20,6 @@ public class Wall : MonoBehaviour
         if (!setup)
         {
             GetComponent<MeshFilter>().hideFlags = HideFlags.NotEditable;
-            GetComponent<MeshRenderer>().hideFlags = HideFlags.NotEditable;
             setup = true;
         }
     }
