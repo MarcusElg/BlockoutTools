@@ -74,7 +74,7 @@ public class WallEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 currentHeightHandlePosition = nearestPosition + Vector3.up * wall.height;
-            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, Vector3.up, 0.1f, DiscHandleCap.CapFunction, 0);
+            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, Vector3.up, 0.1f, DiscHandleCap.CapFunction, EditorSnapSettings.move.y);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -87,7 +87,7 @@ public class WallEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 thicknessHandlePosition = nearestPosition + nearestLeft * wall.thickness;
-            thicknessHandlePosition = Handles.Slider(thicknessHandlePosition, nearestLeft, 0.1f, DiscHandleCap.CapFunction, 0);
+            thicknessHandlePosition = Handles.Slider(thicknessHandlePosition, nearestLeft, 0.1f, DiscHandleCap.CapFunction, EditorSnapSettings.move.x);
 
             if (EditorGUI.EndChangeCheck())
             {
