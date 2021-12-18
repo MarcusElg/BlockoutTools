@@ -6,7 +6,6 @@ public static class DiscHandleCap
     // A handle cap that renders a disc
     public static void CapFunction(int controlID, Vector3 position, Quaternion rotation, float size, EventType eventType)
     {
-        // TODO: Expose size settings
         switch (Event.current.type)
         {
             case EventType.Layout:
@@ -17,7 +16,7 @@ public static class DiscHandleCap
                 }
             case EventType.Repaint:
                 {
-                    Handles.color = Color.blue;
+                    Handles.color = PrototypingToolSettings.gizmoColour;
 
                     // On hover
                     if (HandleUtility.nearestControl == controlID)
@@ -28,7 +27,7 @@ public static class DiscHandleCap
                     // On selection
                     if (GUIUtility.hotControl == controlID)
                     {
-                        Handles.color = Color.red;
+                        Handles.color = PrototypingToolSettings.selectedGizmoColour;
                     }
 
                     Handles.DrawSolidDisc(position, Camera.current.transform.rotation * Vector3.forward, size);
