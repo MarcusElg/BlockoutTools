@@ -46,20 +46,21 @@ public class Wall : MonoBehaviour
         List<Vector2> uvs = new List<Vector2>();
 
         // Don't try generate for less than 2 spline knots
-        if (spline.KnotCount <= 2)
+        if (spline.KnotCount < 2)
         {
             CreateMesh(vertices, triangles, uvs);
             return;
         }
 
         float currentDistance = 0.02f; // Not zero as that creates flat texture on cap
+        bool shouldClose = spline.Closed && spline.KnotCount >= 2;
 
         for (int i = 0; i < spline.KnotCount; i++)
         {
             Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
             int nextIndex = (i + 1) % spline.KnotCount;
 
-            if (spline.Closed)
+            if (shouldClose)
             {
                 nextIndex = (i + 1) % (spline.KnotCount + 1); // Extra vertex at end
             }
@@ -73,13 +74,13 @@ public class Wall : MonoBehaviour
             vertices.Add(leftPosition + Vector3.up * height); // Upper left
 
             // Add triangles =
-            if (i < spline.KnotCount - 1 || spline.Closed)
+            if (i < spline.KnotCount - 1 || shouldClose)
             {
                 MeshTools.ConnectToNextIteration(ref triangles, i, nextIndex, 4);
             }
 
             // Add cap triangles
-            if (!spline.Closed && (i == 0 || i == spline.KnotCount - 1))
+            if (!shouldClose && (i == 0 || i == spline.KnotCount - 1))
             {
                 if (i == 0)
                 {
@@ -101,7 +102,7 @@ public class Wall : MonoBehaviour
             currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.KnotCount].Position);
         }
 
-        if (spline.Closed)
+        if (shouldClose)
         {
             // Add extra vertices to prevent uv stretching
             vertices.AddRange(vertices.GetRange(0, 4));
