@@ -38,11 +38,19 @@ public class Wall : MonoBehaviour
     private void GenerateMesh()
     {
         Spline spline = GetComponent<SplineContainer>().Spline;
+
         BezierKnot[] knots = spline.ToArray();
 
         List<Vector3> vertices = new List<Vector3>();
         List<int> triangles = new List<int>();
         List<Vector2> uvs = new List<Vector2>();
+
+        // Don't try generate for less than 2 spline knots
+        if (spline.KnotCount <= 2)
+        {
+            CreateMesh(vertices, triangles, uvs);
+            return;
+        }
 
         float currentDistance = 0.02f; // Not zero as that creates flat texture on cap
 

@@ -1,12 +1,15 @@
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Splines;
+using UnityEditor;
+using UnityEditor.EditorTools;
+using UnityEditor.Splines;
 
 [CustomEditor(typeof(Wall))]
 public class WallEditor : Editor
 {
 
     Wall wall = null;
+    bool setupCompleted = false;
 
     private void OnEnable()
     {
@@ -19,10 +22,18 @@ public class WallEditor : Editor
     private void OnDisable()
     {
         wall.GetComponent<SplineContainer>().Spline.changed -= wall.Generate;
+        setupCompleted = false;
     }
 
     public void OnSceneGUI()
     {
+        // Calling it in OnEnable is too early as spline has not loaded yet
+        if (!setupCompleted)
+        {
+            ToolManager.SetActiveContext(typeof(SplineToolContext));
+            setupCompleted = true;
+        }
+
         Draw();
     }
 
