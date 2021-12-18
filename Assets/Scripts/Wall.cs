@@ -12,6 +12,8 @@ public class Wall : MonoBehaviour
 
     // Internal
     bool setup = false;
+    public List<Vector3> wallCenterPositions = new List<Vector3>();
+    public List<Vector3> wallCenterLefts = new List<Vector3>();
 
     public void Setup()
     {
@@ -55,15 +57,19 @@ public class Wall : MonoBehaviour
         if (spline.KnotCount < 2)
         {
             CreateMesh(vertices, triangles, uvs);
+            wallCenterPositions.Clear();
+            wallCenterLefts.Clear();
             return;
         }
 
         float currentDistance = 0.02f; // Not zero as that creates flat texture on cap
         bool shouldClose = spline.Closed && spline.KnotCount >= 2;
 
+        GenerateWallCenterPositions(knots, shouldClose);
+
         for (int i = 0; i < spline.KnotCount; i++)
         {
-            Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
+            Vector3 left = wallCenterLefts[i % (wallCenterLefts.Count)];
             int nextIndex = (i + 1) % spline.KnotCount;
 
             if (shouldClose)
@@ -121,6 +127,26 @@ public class Wall : MonoBehaviour
         }
 
         CreateMesh(vertices, triangles, uvs);
+    }
+
+    private void GenerateWallCenterPositions(BezierKnot[] knots, bool shouldClose)
+    {
+        wallCenterPositions.Clear();
+        wallCenterLefts.Clear();
+
+        for (int i = 0; i < knots.Length; i++)
+        {
+            // Only generate left direction not center position for last knot if not closed
+            if (i < knots.Length - 1 || shouldClose)
+            {
+                Vector3 currentKnot = transform.TransformPoint(knots[i].Position);
+                Vector3 nextKnot = transform.TransformPoint(knots[(i + 1) % (knots.Length)].Position);
+                wallCenterPositions.Add((currentKnot + nextKnot) / 2);
+            }
+
+            Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
+            wallCenterLefts.Add(left);
+        }
     }
 
     private void CreateMesh(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
