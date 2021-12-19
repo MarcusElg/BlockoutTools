@@ -68,7 +68,7 @@ public class Wall : MonoBehaviour
 
         for (int i = 0; i < spline.KnotCount; i++)
         {
-            Vector3 left = wallCenterLefts[i % (wallCenterLefts.Count)];
+            Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
             int nextIndex = (i + 1) % spline.KnotCount;
 
             if (shouldClose)
@@ -133,17 +133,14 @@ public class Wall : MonoBehaviour
         wallCenterPositions.Clear();
         wallCenterLefts.Clear();
 
-        for (int i = 0; i < knots.Length; i++)
+        int endIndex = shouldClose ? knots.Length : knots.Length - 1;
+        for (int i = 0; i < endIndex; i++)
         {
-            // Only generate left direction not center position for last knot if not closed
-            if (i < knots.Length - 1 || shouldClose)
-            {
-                Vector3 currentKnot = transform.TransformPoint(knots[i].Position);
-                Vector3 nextKnot = transform.TransformPoint(knots[(i + 1) % (knots.Length)].Position);
-                wallCenterPositions.Add((currentKnot + nextKnot) / 2);
-            }
+            Vector3 currentKnot = transform.TransformPoint(knots[i].Position);
+            Vector3 nextKnot = transform.TransformPoint(knots[(i + 1) % (knots.Length)].Position);
+            wallCenterPositions.Add((currentKnot + nextKnot) / 2);
 
-            Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
+            Vector3 left = Vector3Extensions.LeftFromForward(nextKnot - currentKnot);
             wallCenterLefts.Add(left);
         }
     }
