@@ -41,61 +41,53 @@ public class Stairs : MonoBehaviour
         List<Vector2> uvs = new List<Vector2>();
 
         int segments = (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition));
+        AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.left, 0); // Left side
+        AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.right, segments * 3 + 1); // Right side
+        MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces
+        CreateMesh(vertices, triangles, uvs);
+    }
 
+    private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, Vector3 left, int offset)
+    {
         for (int i = 0; i < segments; i++)
         {
-            // Add start vertices
+            // Add start vertex .
             if (i == 0)
             {
-                vertices.Add(Vector3.left * width / 2);
-                vertices.Add(Vector3.right * width / 2);
+                vertices.Add(left * width / 2);
             }
 
-            // Add vertices *: (left side)
-            vertices.Add(Vector3.forward * depth * i + Vector3.up * height * (i + 1) + Vector3.left * width / 2); // Top left
-            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * (i + 1) + Vector3.left * width / 2); // Top right
-            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + Vector3.left * width / 2); // Bottom right
-
-            // Add vetices *: (right side)
-            vertices.Add(Vector3.forward * depth * i + Vector3.up * height * (i + 1) + Vector3.right * width / 2); // Top left
-            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * (i + 1) + Vector3.right * width / 2); // Top right
-            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + Vector3.right * width / 2); // Bottom right
-
-            // Add triangles
-            MeshTools.AddSquare(ref triangles, i == 0 ? vertices.Count - 8 : vertices.Count - 10, vertices.Count - 6, vertices.Count - 5, vertices.Count - 4); // Left side
-            MeshTools.AddSquare(ref triangles, vertices.Count - 1, vertices.Count - 2, vertices.Count - 3, vertices.Count - 7); // Right side
-            MeshTools.AddSquare(ref triangles, vertices.Count - 5, vertices.Count - 6, vertices.Count - 3, vertices.Count - 2); // Top face
-            MeshTools.AddSquare(ref triangles, vertices.Count - 7, vertices.Count - 3, vertices.Count - 6, i == 0 ? 0 : vertices.Count - 10); // Front face
-
-            if (i > 0)
-            {
-                MeshTools.AddSquare(ref triangles, vertices.Count - 7, vertices.Count - 10, vertices.Count - 4, vertices.Count - 1); // Bottom face
-            }
-
-            // Add top face
-            if (i == segments - 1)
-            {
-                MeshTools.AddSquare(ref triangles, vertices.Count - 4, vertices.Count - 5, vertices.Count - 2, vertices.Count - 1);
-            }
+            // Add top vertices :*
+            vertices.Add(Vector3.forward * depth * i + Vector3.up * height * (i + 1) + left * width / 2); // Top left
+            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * (i + 1) + left * width / 2); // Top right
 
             // Add uvs
             // Add start vertex
             if (i == 0)
             {
                 uvs.Add(Vector2.zero);
-                uvs.Add(Vector2.zero);
             }
-
-            uvs.Add(Vector2.zero);
-            uvs.Add(Vector2.zero);
-            uvs.Add(Vector2.zero);
 
             uvs.Add(Vector2.zero);
             uvs.Add(Vector2.zero);
             uvs.Add(Vector2.zero);
         }
 
-        CreateMesh(vertices, triangles, uvs);
+        for (int i = segments - 1; i >= 0; i--)
+        {
+            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
+
+            if (offset == 0)
+            {
+                // Normal in left direction
+                MeshTools.AddSquare(ref triangles, offset + i * 2, offset + i * 2 + 1, vertices.Count - 2, vertices.Count - 1);
+            }
+            else
+            {
+                // Normal in right direction
+                MeshTools.AddSquare(ref triangles, vertices.Count - 1, vertices.Count - 2, offset + i * 2 + 1, offset + i * 2);
+            }
+        }
     }
 
     private void CreateMesh(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
