@@ -40,6 +40,9 @@ public class Wall : MonoBehaviour
         // Validate spline
         SplineContainer splineContainer = GetComponent<SplineContainer>();
         splineContainer.Spline.EditType = SplineType.Linear;
+
+        // Prevent scaling
+        transform.localScale = Vector3.one;
     }
 
     private void GenerateMesh()
