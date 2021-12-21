@@ -44,6 +44,12 @@ public class WallEditor : Editor
 
         Event currentEvent = Event.current;
         Draw(currentEvent);
+
+        if (wall.transform.hasChanged)
+        {
+            wall.Generate();
+            wall.transform.hasChanged = false;
+        }
     }
 
     public override void OnInspectorGUI()
