@@ -25,8 +25,13 @@ public class StairEditor : Editor
     {
         settings = PrototypingToolSettings.GetUpdatedSettings(settings);
 
-        Event currentEvent = Event.current;
-        Draw(currentEvent);
+        // Rotation and scaling tools breaks the system
+        if (Tools.current == Tool.Rotate || Tools.current == Tool.Scale)
+        {
+            Tools.current = Tool.Move;
+        }
+
+        Draw();
 
         if (stairs.transform.hasChanged)
         {
@@ -50,7 +55,7 @@ public class StairEditor : Editor
         }
     }
 
-    private void Draw(Event currentEvent)
+    private void Draw()
     {
         // Dragging handles requires more than just draw event
         // Target position handle
