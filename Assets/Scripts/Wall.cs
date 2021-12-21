@@ -12,18 +12,8 @@ public class Wall : MonoBehaviour
     public float uvScaling = 1;
 
     // Internal
-    bool setup = false;
     public List<Vector3> wallCenterPositions = new List<Vector3>();
     public List<Vector3> wallCenterLefts = new List<Vector3>();
-
-    public void Setup()
-    {
-        if (!setup)
-        {
-            GetComponent<MeshFilter>().hideFlags = HideFlags.NotEditable;
-            setup = true;
-        }
-    }
 
     public void Generate()
     {

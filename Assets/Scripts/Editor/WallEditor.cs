@@ -16,7 +16,6 @@ public class WallEditor : Editor
     private void OnEnable()
     {
         wall = (Wall)target;
-        wall.Setup();
         settings = PrototypingToolSettings.GetUpdatedSettings();
 
         // Regenerate on changes
