@@ -49,6 +49,7 @@ public class Stairs : MonoBehaviour
 
     private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, Vector3 left, int offset)
     {
+        // Top part
         for (int i = 0; i < segments; i++)
         {
             // Add start vertex .
@@ -73,6 +74,7 @@ public class Stairs : MonoBehaviour
             uvs.Add(Vector2.zero);
         }
 
+        // Bottom part
         for (int i = segments - 1; i >= 0; i--)
         {
             vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
