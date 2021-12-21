@@ -23,7 +23,7 @@ public class Stairs : MonoBehaviour
     {
         // Validate properties
         depth = Mathf.Clamp(depth, 0.5f, 10);
-        width = Mathf.Clamp(width, 0.1f, 2.5f);
+        width = Mathf.Clamp(width, 0.1f, 30f);
         height = Mathf.Clamp(height, 0.1f, 2.5f);
         uvScaling = Mathf.Clamp(uvScaling, 0.1f, 10f);
 
