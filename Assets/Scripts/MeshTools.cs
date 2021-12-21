@@ -10,6 +10,12 @@ public static class MeshTools
         triangles.Add(indexThree);
     }
 
+    // Uses a index and the following two to create a triangle
+    public static void AddFollowingTriangle(ref List<int> triangles, int startIndex)
+    {
+        AddTriangle(ref triangles, startIndex, startIndex + 1, startIndex + 2);
+    }
+
     // Uses a index and the following three to create a square
     public static void AddFollowingSquare(ref List<int> triangles, int startIndex)
     {
