@@ -62,7 +62,7 @@ public class StairEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 currentTargetHandlePosition = stairs.transform.position + stairs.targetPosition;
-            Vector3 newTargetHandlePosition = Handles.DoPositionHandle(currentTargetHandlePosition, Quaternion.identity);// Handles.FreeMoveHandle(currentTargetHandlePosition, settings.FindProperty("gizmoSize").floatValue, EditorSnapSettings.move, DiscHandleCap.CapFunction);
+            Vector3 newTargetHandlePosition = CustomHandles.DrawPositionHandle(false, settings.FindProperty("gizmoSize").floatValue * 5, currentTargetHandlePosition, Quaternion.identity);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -75,7 +75,7 @@ public class StairEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 widthHandlePosition = stairs.transform.TransformPoint(Vector3.left * stairs.width / 2 + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
-            widthHandlePosition = Handles.Slider(widthHandlePosition, stairs.transform.TransformDirection(Vector3.left), settings.FindProperty("gizmoSize").floatValue, DiscHandleCap.CapFunction, EditorSnapSettings.move.x);
+            widthHandlePosition = Handles.Slider(widthHandlePosition, stairs.transform.TransformDirection(Vector3.left), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -88,7 +88,7 @@ public class StairEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 depthHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth); // Convert to global space
-            depthHandlePosition = Handles.Slider(depthHandlePosition, stairs.transform.TransformDirection(Vector3.forward), settings.FindProperty("gizmoSize").floatValue, DiscHandleCap.CapFunction, EditorSnapSettings.move.z);
+            depthHandlePosition = Handles.Slider(depthHandlePosition, stairs.transform.TransformDirection(Vector3.forward), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.z);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -101,7 +101,7 @@ public class StairEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 heightHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height + Vector3.forward * stairs.depth / 2); // Convert to global space
-            heightHandlePosition = Handles.Slider(heightHandlePosition, stairs.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, DiscHandleCap.CapFunction, EditorSnapSettings.move.y);
+            heightHandlePosition = Handles.Slider(heightHandlePosition, stairs.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
 
             if (EditorGUI.EndChangeCheck())
             {

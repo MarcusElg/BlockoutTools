@@ -83,7 +83,7 @@ public class WallEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 currentHeightHandlePosition = nearestPosition + Vector3.up * wall.height;
-            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, Vector3.up, settings.FindProperty("gizmoSize").floatValue, DiscHandleCap.CapFunction, EditorSnapSettings.move.y);
+            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, Vector3.up, settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -96,7 +96,7 @@ public class WallEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
             Vector3 thicknessHandlePosition = nearestPosition + nearestLeft * wall.thickness;
-            thicknessHandlePosition = Handles.Slider(thicknessHandlePosition, nearestLeft, settings.FindProperty("gizmoSize").floatValue, DiscHandleCap.CapFunction, EditorSnapSettings.move.x);
+            thicknessHandlePosition = Handles.Slider(thicknessHandlePosition, nearestLeft, settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
 
             if (EditorGUI.EndChangeCheck())
             {

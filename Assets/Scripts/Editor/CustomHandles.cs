@@ -1,10 +1,10 @@
 using UnityEditor;
 using UnityEngine;
 
-public static class DiscHandleCap
+public static class CustomHandles
 {
     // A handle cap that renders a disc
-    public static void CapFunction(int controlID, Vector3 position, Quaternion rotation, float size, EventType eventType)
+    public static void DiscCapFunction(int controlID, Vector3 position, Quaternion rotation, float size, EventType eventType)
     {
         SerializedObject settings = PrototypingToolSettings.GetUpdatedSettings();
 
@@ -38,5 +38,25 @@ public static class DiscHandleCap
                     break;
                 }
         }
+    }
+
+    public static Vector3 DrawPositionHandle(bool alwaysScale, float handleSize, Vector3 position, Quaternion rotation)
+    {
+        handleSize = Mathf.Min(handleSize, HandleUtility.GetHandleSize(position));
+
+        if (alwaysScale)
+        {
+            handleSize = HandleUtility.GetHandleSize(position);
+        }
+
+        Color color = Handles.color;
+        Handles.color = Handles.xAxisColor;
+        position = Handles.Slider(position, rotation * Vector3.right, handleSize, Handles.ArrowHandleCap, EditorSnapSettings.move.x);
+        Handles.color = Handles.yAxisColor;
+        position = Handles.Slider(position, rotation * Vector3.up, handleSize, Handles.ArrowHandleCap, EditorSnapSettings.move.y);
+        Handles.color = Handles.zAxisColor;
+        position = Handles.Slider(position, rotation * Vector3.forward, handleSize, Handles.ArrowHandleCap, EditorSnapSettings.move.z);
+        Handles.color = color;
+        return position;
     }
 }
