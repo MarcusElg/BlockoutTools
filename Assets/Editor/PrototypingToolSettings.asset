@@ -12,3 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29328e50bfa511a49acb619c3e43c3ed, type: 3}
   m_Name: PrototypingToolSettings
   m_EditorClassIdentifier: 
+  gizmoSize: 0.2
+  gizmoColour: {r: 0, g: 0, b: 1, a: 1}
+  selectedGizmoColour: {r: 1, g: 0, b: 0, a: 1}

@@ -62,7 +62,7 @@ public class WallEditor : Editor
     private void Draw(Event currentEvent)
     {
         // Prevent handles when knot placement tool is selected
-        if (wall.GetComponent<SplineContainer>().Spline.KnotCount < 2 || Tools.current == Tool.Custom)
+        if (wall.GetComponent<SplineContainer>().Spline.Count < 2 || Tools.current == Tool.Custom)
         {
             return;
         }

@@ -53,7 +53,7 @@ public class Wall : MonoBehaviour
         List<Vector2> uvs = new List<Vector2>();
 
         // Don't try generate for less than 2 spline knots
-        if (spline.KnotCount < 2)
+        if (spline.Count < 2)
         {
             CreateMesh(vertices, triangles, uvs);
             wallCenterPositions.Clear();
@@ -62,18 +62,18 @@ public class Wall : MonoBehaviour
         }
 
         float currentDistance = 0.02f; // Not zero as that creates flat texture on cap
-        bool shouldClose = spline.Closed && spline.KnotCount >= 2;
+        bool shouldClose = spline.Closed && spline.Count >= 2;
 
         GenerateWallCenterPositions(knots, shouldClose);
 
-        for (int i = 0; i < spline.KnotCount; i++)
+        for (int i = 0; i < spline.Count; i++)
         {
             Vector3 left = (Quaternion)knots[i].Rotation * Vector3Extensions.GetInwardsFromTangents(((Vector3)knots[i].TangentIn).normalized, ((Vector3)knots[i].TangentOut).normalized);
-            int nextIndex = (i + 1) % spline.KnotCount;
+            int nextIndex = (i + 1) % spline.Count;
 
             if (shouldClose)
             {
-                nextIndex = (i + 1) % (spline.KnotCount + 1); // Extra vertex at end
+                nextIndex = (i + 1) % (spline.Count + 1); // Extra vertex at end
             }
 
             // Add vertices ::
@@ -85,13 +85,13 @@ public class Wall : MonoBehaviour
             vertices.Add(leftPosition + Vector3.up * height); // Upper left
 
             // Add triangles =
-            if (i < spline.KnotCount - 1 || shouldClose)
+            if (i < spline.Count - 1 || shouldClose)
             {
                 MeshTools.ConnectToNextIteration(ref triangles, i, nextIndex, 4);
             }
 
             // Add cap triangles
-            if (!shouldClose && (i == 0 || i == spline.KnotCount - 1))
+            if (!shouldClose && (i == 0 || i == spline.Count - 1))
             {
                 if (i == 0)
                 {
@@ -110,7 +110,7 @@ public class Wall : MonoBehaviour
             uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
 
             // Update for next iteration
-            currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.KnotCount].Position);
+            currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.Count].Position);
         }
 
         if (shouldClose)
