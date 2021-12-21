@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
+[RequireComponent(typeof(SplineContainer), typeof(MeshRenderer), typeof(MeshFilter))]
 public class Wall : MonoBehaviour
 {
 

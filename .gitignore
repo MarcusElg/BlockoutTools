@@ -61,3 +61,6 @@ crashlytics-build.properties
 UserSettings/Layouts/default-2022.dwlt
 ProjectSettings/PackageManagerSettings.asset
 Assets/Scenes/SampleScene.unity
+Assets/Samples
+Assets/Samples.meta
+UserSettings
