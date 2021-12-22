@@ -16,7 +16,6 @@ public class WallEditor : Editor
     private void OnEnable()
     {
         wall = (Wall)target;
-        settings = PrototypingToolSettings.GetUpdatedSettings();
 
         // Regenerate on changes
         wall.GetComponent<SplineContainer>().Spline.changed += wall.Generate;

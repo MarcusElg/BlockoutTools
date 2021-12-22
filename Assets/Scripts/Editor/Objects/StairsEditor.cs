@@ -10,7 +10,6 @@ public class StairEditor : Editor
     private void OnEnable()
     {
         stairs = (Stairs)target;
-        settings = PrototypingToolSettings.GetUpdatedSettings();
 
         // Regenerate on changes
         Undo.undoRedoPerformed += stairs.Generate;
