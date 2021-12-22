@@ -25,7 +25,7 @@ public class WallEditor : Editor
     private void OnDisable()
     {
         wall.GetComponent<SplineContainer>().Spline.changed -= wall.Generate;
-        Undo.undoRedoPerformed += wall.Generate;
+        Undo.undoRedoPerformed -= wall.Generate;
         setupCompleted = false;
     }
 
@@ -80,12 +80,12 @@ public class WallEditor : Editor
         // Height handle
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 currentHeightHandlePosition = nearestPosition + Vector3.up * wall.height;
-            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, Vector3.up, settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
+            Vector3 currentHeightHandlePosition = nearestPosition + wall.transform.TransformDirection(Vector3.up) * wall.height;
+            Vector3 newHeightHandlePosition = Handles.Slider(currentHeightHandlePosition, wall.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
 
             if (EditorGUI.EndChangeCheck())
             {
-                wall.height += (newHeightHandlePosition - currentHeightHandlePosition).y;
+                wall.height += (wall.transform.InverseTransformPoint(newHeightHandlePosition) - wall.transform.InverseTransformPoint(currentHeightHandlePosition)).y;
                 wall.Generate();
             }
         }

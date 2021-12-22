@@ -17,7 +17,7 @@ public class StairEditor : Editor
 
     private void OnDisable()
     {
-        Undo.undoRedoPerformed += stairs.Generate;
+        Undo.undoRedoPerformed -= stairs.Generate;
     }
 
     public void OnSceneGUI()
