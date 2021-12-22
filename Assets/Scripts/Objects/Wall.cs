@@ -7,8 +7,8 @@ public class Wall : MonoBehaviour
 {
 
     // Properties
-    public float height = 5;
-    public float thickness = 1;
+    public float height = 2;
+    public float thickness = 0.25f;
 
     // Internal
     public List<Vector3> wallCenterPositions = new List<Vector3>();

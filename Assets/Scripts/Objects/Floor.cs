@@ -7,7 +7,7 @@ public class Floor : MonoBehaviour
 {
 
     // Properties
-    public float thickness = 5;
+    public float thickness = 0.25f;
 
     // Internal
     public Vector3 centerPosition;

@@ -7,10 +7,10 @@ public class Stairs : MonoBehaviour
 {
 
     // Properties
-    public float depth = 1;
-    public float width = 1;
-    public float height = 1;
-    public Vector3 targetPosition = new Vector3(0, 1, 1);
+    public float depth = 0.25f;
+    public float width = 3;
+    public float height = 0.25f;
+    public Vector3 targetPosition = new Vector3(3, 1, 0);
 
     public void Generate()
     {
