@@ -44,7 +44,7 @@ public class Stairs : MonoBehaviour
         AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.left, 0); // Left side
         AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.right, segments * 3 + 1); // Right side
         MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces
-        CreateMesh(vertices, triangles, uvs);
+        MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
     }
 
     private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, Vector3 left, int offset)
@@ -90,15 +90,5 @@ public class Stairs : MonoBehaviour
                 MeshTools.AddSquare(ref triangles, vertices.Count - 1, vertices.Count - 2, offset + i * 2 + 1, offset + i * 2);
             }
         }
-    }
-
-    private void CreateMesh(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
-    {
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.uv = uvs.ToArray();
-
-        GetComponent<MeshFilter>().sharedMesh = mesh;
     }
 }

@@ -49,7 +49,7 @@ public class Wall : MonoBehaviour
         // Don't try generate for less than 2 spline knots
         if (spline.Count < 2)
         {
-            CreateMesh(vertices, triangles, uvs);
+            MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
             wallCenterPositions.Clear();
             wallCenterLefts.Clear();
             return;
@@ -119,7 +119,7 @@ public class Wall : MonoBehaviour
             uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
         }
 
-        CreateMesh(vertices, triangles, uvs);
+        MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
     }
 
     private void GenerateWallCenterPositions(BezierKnot[] knots, bool shouldClose)
@@ -137,15 +137,5 @@ public class Wall : MonoBehaviour
             Vector3 left = Vector3Extensions.LeftFromForward(nextKnot - currentKnot);
             wallCenterLefts.Add(left);
         }
-    }
-
-    private void CreateMesh(List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
-    {
-        Mesh mesh = new Mesh();
-        mesh.vertices = vertices.ToArray();
-        mesh.triangles = triangles.ToArray();
-        mesh.uv = uvs.ToArray();
-
-        GetComponent<MeshFilter>().sharedMesh = mesh;
     }
 }

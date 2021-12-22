@@ -42,4 +42,27 @@ public static class MeshTools
             AddSquare(ref triangles, nextIndex * countPerIteration + i, nextIndex * countPerIteration + nextI, currentIndex * countPerIteration + nextI, currentIndex * countPerIteration + i);
         }
     }
+
+    public static void CreateMesh(GameObject gameObject, List<Vector3> vertices, List<int> triangles, List<Vector2> uvs)
+    {
+        // Flat shaded triangles
+        Vector3[] flatShadedVertices = new Vector3[triangles.Count];
+        Vector2[] flatShadedUvs = new Vector2[triangles.Count];
+
+        for (int i = 0; i < triangles.Count; i++)
+        {
+            flatShadedVertices[i] = vertices[triangles[i]];
+            flatShadedUvs[i] = uvs[triangles[i]];
+
+            triangles[i] = i;
+        }
+
+        Mesh mesh = new Mesh();
+        mesh.vertices = flatShadedVertices;
+        mesh.triangles = triangles.ToArray();
+        mesh.uv = flatShadedUvs;
+        mesh.RecalculateNormals();
+
+        gameObject.GetComponent<MeshFilter>().sharedMesh = mesh;
+    }
 }
