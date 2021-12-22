@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class MeshTools
@@ -43,25 +44,13 @@ public static class MeshTools
         }
     }
 
-    public static List<int> PolygonTriangulation(List<Vector3> shapeVertices, ref List<Vector3> meshVertices, ref List<Vector2> meshUvs, bool flipTriangles = false)
+    public static List<int> PolygonTriangulation(List<Vector3> shapeVertices, int vertexIndexOffset, bool flipTriangles = false)
     {
         List<int> triangles = new List<int>();
-        List<int> vertexIndexes = new List<int>();
+        List<int> vertexIndexes = new List<int>(Enumerable.Range(0, shapeVertices.Count));
+
         int currentIndex = 0;
         int iterations = 0;
-
-        // Duplicate vertices
-        for (int i = 0; i < shapeVertices.Count; i++)
-        {
-            meshVertices.Add(shapeVertices[i]);
-            meshUvs.Add(meshUvs[i]);
-        }
-
-        // Populate vertexIndexes
-        for (int i = 0; i < shapeVertices.Count; i++)
-        {
-            vertexIndexes.Add(i);
-        }
 
         // Make sure that it doesn't loop forever
         while (iterations < 1000 && vertexIndexes.Count > 2)
@@ -127,13 +116,11 @@ public static class MeshTools
                 // Add triangle
                 if (flipTriangles)
                 {
-                    MeshTools.AddTriangle(ref triangles, meshVertices.Count - shapeVertices.Count + vertexIndexes[nextIndex],
-                        meshVertices.Count - shapeVertices.Count + vertexIndexes[currentIndex], meshVertices.Count - shapeVertices.Count + vertexIndexes[previousIndex]);
+                    MeshTools.AddTriangle(ref triangles, vertexIndexOffset + vertexIndexes[nextIndex], vertexIndexOffset + vertexIndexes[currentIndex], vertexIndexOffset + vertexIndexes[previousIndex]);
                 }
                 else
                 {
-                    MeshTools.AddTriangle(ref triangles, meshVertices.Count - shapeVertices.Count + vertexIndexes[previousIndex],
-                        meshVertices.Count - shapeVertices.Count + vertexIndexes[currentIndex], meshVertices.Count - shapeVertices.Count + vertexIndexes[nextIndex]);
+                    MeshTools.AddTriangle(ref triangles, vertexIndexOffset + vertexIndexes[previousIndex], vertexIndexOffset + vertexIndexes[currentIndex], vertexIndexOffset + vertexIndexes[nextIndex]);
                 }
 
                 // Remove from list

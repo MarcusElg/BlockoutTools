@@ -68,8 +68,8 @@ public class Floor : MonoBehaviour
 
         MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create sides
         int vertexCount = vertices.Count;
-        triangles.AddRange(MeshTools.PolygonTriangulation(vertices.GetRange(0, vertexCount / 2), ref vertices, ref uvs, true)); // Create bottom
-        triangles.AddRange(MeshTools.PolygonTriangulation(vertices.GetRange(vertexCount / 2, vertexCount / 2), ref vertices, ref uvs)); // Create top
+        triangles.AddRange(MeshTools.PolygonTriangulation(vertices.GetRange(0, vertexCount / 2), 0, true)); // Create bottom
+        triangles.AddRange(MeshTools.PolygonTriangulation(vertices.GetRange(vertexCount / 2, vertexCount / 2), vertexCount / 2)); // Create top
 
         MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
     }
