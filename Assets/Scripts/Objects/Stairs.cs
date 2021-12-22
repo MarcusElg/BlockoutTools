@@ -10,7 +10,6 @@ public class Stairs : MonoBehaviour
     public float depth = 1;
     public float width = 1;
     public float height = 1;
-    public float uvScaling = 1;
     public Vector3 targetPosition = new Vector3(0, 1, 1);
 
     public void Generate()
@@ -25,7 +24,6 @@ public class Stairs : MonoBehaviour
         depth = Mathf.Clamp(depth, 0.15f, 3f);
         width = Mathf.Clamp(width, 1f, 30f);
         height = Mathf.Clamp(height, 0.15f, 1f);
-        uvScaling = Mathf.Clamp(uvScaling, 0.1f, 10f);
 
         // Prevent scaling
         transform.localScale = Vector3.one;

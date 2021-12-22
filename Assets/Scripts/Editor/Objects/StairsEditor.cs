@@ -46,7 +46,6 @@ public class StairEditor : Editor
         stairs.depth = EditorGUILayout.FloatField("Depth", stairs.depth);
         stairs.width = EditorGUILayout.FloatField("Width", stairs.width);
         stairs.height = EditorGUILayout.FloatField("Height", stairs.height);
-        stairs.uvScaling = EditorGUILayout.FloatField("Uv Scale", stairs.uvScaling);
         stairs.targetPosition = EditorGUILayout.Vector3Field(new GUIContent("Target Position", "Position for the stairs to generate towards in local space"), stairs.targetPosition);
 
         if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))

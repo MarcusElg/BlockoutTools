@@ -56,7 +56,6 @@ public class WallEditor : Editor
         EditorGUI.BeginChangeCheck();
         wall.height = EditorGUILayout.FloatField("Height", wall.height);
         wall.thickness = EditorGUILayout.FloatField("Thickness", wall.thickness);
-        wall.uvScaling = EditorGUILayout.FloatField("Uv Scale", wall.uvScaling);
 
         if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
         {

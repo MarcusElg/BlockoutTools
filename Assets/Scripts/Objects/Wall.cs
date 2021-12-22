@@ -9,7 +9,6 @@ public class Wall : MonoBehaviour
     // Properties
     public float height = 5;
     public float thickness = 1;
-    public float uvScaling = 1;
 
     // Internal
     public List<Vector3> wallCenterPositions = new List<Vector3>();
@@ -26,7 +25,6 @@ public class Wall : MonoBehaviour
         // Validate properties
         height = Mathf.Clamp(height, 0.5f, 10);
         thickness = Mathf.Clamp(thickness, 0.1f, 2.5f);
-        uvScaling = Mathf.Clamp(uvScaling, 0.1f, 10f);
 
         // Validate spline
         SplineContainer splineContainer = GetComponent<SplineContainer>();
@@ -98,10 +96,10 @@ public class Wall : MonoBehaviour
             }
 
             // Add uvs
-            uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, height) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, 2 * thickness));
+            uvs.Add(new Vector2(currentDistance, 0));
+            uvs.Add(new Vector2(currentDistance, height));
+            uvs.Add(new Vector2(currentDistance, height + 2 * thickness));
 
             // Update for next iteration
             currentDistance += Vector3.Distance(knots[i].Position, knots[(i + 1) % spline.Count].Position);
@@ -113,10 +111,10 @@ public class Wall : MonoBehaviour
             vertices.AddRange(vertices.GetRange(0, 4));
 
             // Add extra uvs
-            uvs.Add(new Vector2(currentDistance, 2 * thickness) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, 0) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, height) / uvScaling);
-            uvs.Add(new Vector2(currentDistance, height + 2 * thickness) / uvScaling);
+            uvs.Add(new Vector2(currentDistance, 2 * thickness));
+            uvs.Add(new Vector2(currentDistance, 0));
+            uvs.Add(new Vector2(currentDistance, height));
+            uvs.Add(new Vector2(currentDistance, height + 2 * thickness));
         }
 
         MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
