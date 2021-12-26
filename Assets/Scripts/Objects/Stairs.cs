@@ -41,13 +41,14 @@ namespace BlockoutTools
             List<Vector2> uvs = new List<Vector2>();
 
             int segments = Mathf.Max(1, (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / depth));
-            AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.left, 0); // Left side
-            AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.right, segments * 3 + 1); // Right side
+            float actualDepth = Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / segments;
+            AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualDepth, Vector3.left, 0); // Left side
+            AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualDepth, Vector3.right, segments * 3 + 1); // Right side
             MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces
             MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
         }
 
-        private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, Vector3 left, int offset)
+        private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, float actualDepth, Vector3 left, int offset)
         {
             // Top part
             for (int i = 0; i < segments; i++)
@@ -59,8 +60,8 @@ namespace BlockoutTools
                 }
 
                 // Add top vertices :*
-                vertices.Add(Vector3.forward * depth * i + Vector3.up * height * (i + 1) + left * width / 2); // Top left
-                vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * (i + 1) + left * width / 2); // Top right
+                vertices.Add(Vector3.forward * actualDepth * i + Vector3.up * height * (i + 1) + left * width / 2); // Top left
+                vertices.Add(Vector3.forward * actualDepth * (i + 1) + Vector3.up * height * (i + 1) + left * width / 2); // Top right
 
                 // Add uvs
                 // Add start vertex
@@ -77,7 +78,7 @@ namespace BlockoutTools
             // Bottom part
             for (int i = segments - 1; i >= 0; i--)
             {
-                vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
+                vertices.Add(Vector3.forward * actualDepth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
 
                 if (offset == 0)
                 {
