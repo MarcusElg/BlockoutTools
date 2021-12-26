@@ -6,8 +6,16 @@ using UnityEngine;
 public class Stairs : MonoBehaviour
 {
 
+    public enum Type
+    {
+        Straight,
+        Spiral
+    }
+
     // Properties
+    public Type type;
     public float depth = 0.25f;
+    public float innerRadius = 0.25f;
     public float width = 3;
     public float height = 0.25f;
     public Vector3 targetPosition = new Vector3(3, 1, 0);
@@ -22,6 +30,7 @@ public class Stairs : MonoBehaviour
     {
         // Validate properties
         depth = Mathf.Clamp(depth, 0.15f, 3f);
+        innerRadius = Mathf.Clamp(innerRadius, 0.1f, 1f);
         width = Mathf.Clamp(width, 1f, 30f);
         height = Mathf.Clamp(height, 0.15f, 1f);
 

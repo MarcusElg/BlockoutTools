@@ -47,7 +47,14 @@ public class StairEditor : Editor
     public override void OnInspectorGUI()
     {
         EditorGUI.BeginChangeCheck();
+        stairs.type = (Stairs.Type)EditorGUILayout.EnumPopup("Type", stairs.type);
         stairs.depth = EditorGUILayout.FloatField("Depth", stairs.depth);
+
+        if (stairs.type == Stairs.Type.Spiral)
+        {
+            stairs.innerRadius = EditorGUILayout.FloatField("Inner Radius", stairs.innerRadius);
+        }
+
         stairs.width = EditorGUILayout.FloatField("Width", stairs.width);
         stairs.height = EditorGUILayout.FloatField("Height", stairs.height);
         stairs.targetPosition = EditorGUILayout.Vector3Field(new GUIContent("Target Position", "Position for the stairs to generate towards in local space"), stairs.targetPosition);
@@ -74,28 +81,45 @@ public class StairEditor : Editor
             }
         }
 
+        float widthOffset;
         // Width handle
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 widthHandlePosition = stairs.transform.TransformPoint(Vector3.right * stairs.width / 2 + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
+            widthOffset = stairs.type == Stairs.Type.Straight ? -stairs.width / 2 : stairs.innerRadius;
+            Vector3 widthHandlePosition = stairs.transform.TransformPoint(Vector3.right * (stairs.width + widthOffset) + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
             widthHandlePosition = Handles.Slider(widthHandlePosition, stairs.transform.TransformDirection(Vector3.right), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
 
             if (EditorGUI.EndChangeCheck())
             {
-                stairs.width = (stairs.transform.InverseTransformPoint(widthHandlePosition) - Vector3.up * stairs.height / 2 - Vector3.forward * stairs.depth / 2).magnitude * 2; // Convert to local space
+                stairs.width = (stairs.transform.InverseTransformPoint(widthHandlePosition) - Vector3.up * stairs.height / 2 - Vector3.forward * stairs.depth / 2 - Vector3.right * widthOffset).magnitude; // Convert to local space
                 stairs.Generate();
             }
         }
 
+        // Inner radius handle
+        if (stairs.type == Stairs.Type.Spiral)
+        {
+            EditorGUI.BeginChangeCheck();
+            Vector3 radiusHandlePosition = stairs.transform.TransformPoint(Vector3.right * stairs.innerRadius + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
+            radiusHandlePosition = Handles.Slider(radiusHandlePosition, stairs.transform.TransformDirection(Vector3.right), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                stairs.innerRadius = (stairs.transform.InverseTransformPoint(radiusHandlePosition) - Vector3.up * stairs.height / 2 - Vector3.forward * stairs.depth / 2).magnitude * 2; // Convert to local space
+                stairs.Generate();
+            }
+        }
+
+        widthOffset = stairs.type == Stairs.Type.Straight ? 0 : stairs.width / 2 + stairs.innerRadius;
         // Depth handle
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 depthHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth); // Convert to global space
+            Vector3 depthHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth + Vector3.right * widthOffset); // Convert to global space
             depthHandlePosition = Handles.Slider(depthHandlePosition, stairs.transform.TransformDirection(Vector3.forward), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.z);
 
             if (EditorGUI.EndChangeCheck())
             {
-                stairs.depth = (stairs.transform.InverseTransformPoint(depthHandlePosition) - Vector3.up * stairs.height / 2).magnitude; // Convert to local space
+                stairs.depth = (stairs.transform.InverseTransformPoint(depthHandlePosition) - Vector3.up * stairs.height / 2 - Vector3.right * widthOffset).magnitude; // Convert to local space
                 stairs.Generate();
             }
         }
@@ -103,14 +127,16 @@ public class StairEditor : Editor
         // Height handle
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 heightHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height + Vector3.forward * stairs.depth / 2); // Convert to global space
+            Vector3 heightHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height + Vector3.forward * stairs.depth / 2 + Vector3.right * widthOffset); // Convert to global space
             heightHandlePosition = Handles.Slider(heightHandlePosition, stairs.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
 
             if (EditorGUI.EndChangeCheck())
             {
-                stairs.height = (stairs.transform.InverseTransformPoint(heightHandlePosition) - Vector3.forward * stairs.depth / 2).magnitude; // Convert to local space
+                stairs.height = (stairs.transform.InverseTransformPoint(heightHandlePosition) - Vector3.forward * stairs.depth / 2 - Vector3.right * widthOffset).magnitude; // Convert to local space
                 stairs.Generate();
             }
         }
+
+        Handles.Disc(Quaternion.identity, stairs.transform.position, Vector3.up, 5, false, 1);
     }
 }
