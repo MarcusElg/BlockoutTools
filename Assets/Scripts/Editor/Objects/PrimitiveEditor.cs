@@ -50,7 +50,6 @@ namespace BlockoutTools
                 movement.Scale(bounds); // Scale with bounds to work the same regardless of bound size
                 primitive.transform.localScale = new Vector3(xScale, yScale, zScale);
                 primitive.transform.position += primitive.transform.rotation * movement;
-                primitive.GetComponent<MeshFilter>().sharedMesh.RecalculateBounds();
             }
         }
     }

@@ -58,6 +58,8 @@ namespace BlockoutTools
             position = Handles.Slider(position, rotation * Vector3.up, handleSize, Handles.ArrowHandleCap, EditorSnapSettings.move.y);
             Handles.color = Handles.zAxisColor;
             position = Handles.Slider(position, rotation * Vector3.forward, handleSize, Handles.ArrowHandleCap, EditorSnapSettings.move.z);
+            Handles.color = Handles.centerColor;
+            position = Handles.FreeMoveHandle(position, handleSize * 0.1f, EditorSnapSettings.move, Handles.RectangleHandleCap);
             Handles.color = color;
             return position;
         }
