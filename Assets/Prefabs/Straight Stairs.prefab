@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3742384319343155099}
   - component: {fileID: 7192626162494148886}
-  - component: {fileID: 3922673352202119163}
   - component: {fileID: 497303761322658633}
+  - component: {fileID: 3922673352202119163}
   m_Layer: 0
   m_Name: Straight Stairs
   m_TagString: Untagged
@@ -50,6 +50,14 @@ MonoBehaviour:
   width: 3
   height: 0.25
   targetPosition: {x: 3, y: 1, z: 0}
+--- !u!33 &497303761322658633
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5831473297879983162}
+  m_Mesh: {fileID: 0}
 --- !u!23 &3922673352202119163
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -92,11 +100,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &497303761322658633
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5831473297879983162}
-  m_Mesh: {fileID: 0}
