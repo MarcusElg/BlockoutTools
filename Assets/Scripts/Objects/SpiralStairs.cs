@@ -49,8 +49,8 @@ namespace BlockoutTools
             // Flip rotation direction
             if (rotateClockwise)
             {
-                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius + width, segments * 3 + 1); // Outer side
-                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius, 0); // Inner side
+                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius + width, 0); // Outer side
+                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius, segments * 3 + 1); // Inner side
             }
             else
             {
@@ -106,12 +106,14 @@ namespace BlockoutTools
                 if (offset == 0)
                 {
                     // Normal in left direction
-                    MeshTools.AddSquare(ref triangles, offset + i * 2, offset + i * 2 + 1, vertices.Count - 2, vertices.Count - 1);
+                    MeshTools.AddSquare(ref triangles, offset + i * 2, offset + i * 2 + 1, offset + i * 2 + 2, vertices.Count - 1);
+                    MeshTools.AddTriangle(ref triangles, offset + i * 2 + 2, vertices.Count - 1, vertices.Count - 2);
                 }
                 else
                 {
                     // Normal in right direction
-                    MeshTools.AddSquare(ref triangles, vertices.Count - 1, vertices.Count - 2, offset + i * 2 + 1, offset + i * 2);
+                    MeshTools.AddSquare(ref triangles, vertices.Count - 1, offset + i * 2 + 2, offset + i * 2 + 1, offset + i * 2);
+                    MeshTools.AddTriangle(ref triangles, vertices.Count - 2, vertices.Count - 1, offset + i * 2 + 2);
                 }
             }
         }
