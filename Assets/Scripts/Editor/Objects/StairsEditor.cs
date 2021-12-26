@@ -77,8 +77,8 @@ public class StairEditor : Editor
         // Width handle
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 widthHandlePosition = stairs.transform.TransformPoint(Vector3.left * stairs.width / 2 + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
-            widthHandlePosition = Handles.Slider(widthHandlePosition, stairs.transform.TransformDirection(Vector3.left), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
+            Vector3 widthHandlePosition = stairs.transform.TransformPoint(Vector3.right * stairs.width / 2 + Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth / 2); // Convert to global space
+            widthHandlePosition = Handles.Slider(widthHandlePosition, stairs.transform.TransformDirection(Vector3.right), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
 
             if (EditorGUI.EndChangeCheck())
             {
