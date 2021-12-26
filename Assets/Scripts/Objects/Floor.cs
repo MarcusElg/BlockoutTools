@@ -26,7 +26,7 @@ public class Floor : MonoBehaviour
         // Validate spline
         SplineContainer splineContainer = GetComponent<SplineContainer>();
         splineContainer.Spline.EditType = SplineType.Linear;
-        splineContainer.Spline.Closed = true;
+        splineContainer.Spline.Closed = false;
 
         // Prevent scaling
         transform.localScale = Vector3.one;
