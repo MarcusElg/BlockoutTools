@@ -24,6 +24,11 @@ public class FloorEditor : Editor
 
     private void OnDisable()
     {
+        if (floor == null)
+        {
+            return;
+        }
+
         floor.GetComponent<SplineContainer>().Spline.changed -= floor.Generate;
         Undo.undoRedoPerformed -= floor.Generate;
         setupCompleted = false;

@@ -24,6 +24,11 @@ public class WallEditor : Editor
 
     private void OnDisable()
     {
+        if (wall == null)
+        {
+            return;
+        }
+
         wall.GetComponent<SplineContainer>().Spline.changed -= wall.Generate;
         Undo.undoRedoPerformed -= wall.Generate;
         setupCompleted = false;

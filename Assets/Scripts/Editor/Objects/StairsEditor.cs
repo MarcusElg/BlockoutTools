@@ -17,6 +17,11 @@ public class StairEditor : Editor
 
     private void OnDisable()
     {
+        if (stairs == null)
+        {
+            return;
+        }
+
         Undo.undoRedoPerformed -= stairs.Generate;
     }
 
