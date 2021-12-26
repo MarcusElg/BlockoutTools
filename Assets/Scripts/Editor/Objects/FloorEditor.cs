@@ -5,84 +5,88 @@ using UnityEditor.EditorTools;
 using UnityEditor.Splines;
 using System.Linq;
 
-[CustomEditor(typeof(Floor))]
-public class FloorEditor : Editor
+namespace BlockoutTools
 {
 
-    Floor floor = null;
-    bool setupCompleted = false;
-    SerializedObject settings;
-
-    private void OnEnable()
+    [CustomEditor(typeof(Floor))]
+    public class FloorEditor : Editor
     {
-        floor = (Floor)target;
 
-        // Regenerate on changes
-        floor.GetComponent<SplineContainer>().Spline.changed += floor.Generate;
-        Undo.undoRedoPerformed += floor.Generate;
-    }
+        Floor floor = null;
+        bool setupCompleted = false;
+        SerializedObject settings;
 
-    private void OnDisable()
-    {
-        if (floor == null)
+        private void OnEnable()
         {
-            return;
+            floor = (Floor)target;
+
+            // Regenerate on changes
+            floor.GetComponent<SplineContainer>().Spline.changed += floor.Generate;
+            Undo.undoRedoPerformed += floor.Generate;
         }
 
-        floor.GetComponent<SplineContainer>().Spline.changed -= floor.Generate;
-        Undo.undoRedoPerformed -= floor.Generate;
-        setupCompleted = false;
-    }
-
-    public void OnSceneGUI()
-    {
-        // Calling it in OnEnable is too early as spline has not loaded yet
-        if (!setupCompleted)
+        private void OnDisable()
         {
-            ToolManager.SetActiveContext(typeof(SplineToolContext));
-            setupCompleted = true;
+            if (floor == null)
+            {
+                return;
+            }
+
+            floor.GetComponent<SplineContainer>().Spline.changed -= floor.Generate;
+            Undo.undoRedoPerformed -= floor.Generate;
+            setupCompleted = false;
         }
 
-        settings = PrototypingToolSettings.GetUpdatedSettings(settings);
-
-        Draw();
-
-        if (floor.transform.hasChanged)
+        public void OnSceneGUI()
         {
-            floor.Generate();
-            floor.transform.hasChanged = false;
-        }
-    }
+            // Calling it in OnEnable is too early as spline has not loaded yet
+            if (!setupCompleted)
+            {
+                ToolManager.SetActiveContext(typeof(SplineToolContext));
+                setupCompleted = true;
+            }
 
-    public override void OnInspectorGUI()
-    {
-        EditorGUI.BeginChangeCheck();
-        floor.thickness = EditorGUILayout.FloatField("Thickness", floor.thickness);
+            settings = PrototypingToolSettings.GetUpdatedSettings(settings);
 
-        if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
-        {
-            floor.Generate();
-        }
-    }
+            Draw();
 
-    private void Draw()
-    {
-        // Prevent handles when knot placement tool is selected
-        if (floor.GetComponent<SplineContainer>().Spline.Count < 2 || Tools.current == Tool.Custom)
-        {
-            return;
+            if (floor.transform.hasChanged)
+            {
+                floor.Generate();
+                floor.transform.hasChanged = false;
+            }
         }
 
-        // Thickness handle
+        public override void OnInspectorGUI()
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 currentThicknessHandlePosition = floor.centerPosition + floor.transform.TransformDirection(Vector3.up) * floor.thickness;
-            Vector3 newThicknessHandlePosition = Handles.Slider(currentThicknessHandlePosition, floor.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
+            floor.thickness = EditorGUILayout.FloatField("Thickness", floor.thickness);
 
-            if (EditorGUI.EndChangeCheck())
+            if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
             {
-                floor.thickness += (floor.transform.InverseTransformPoint(newThicknessHandlePosition) - floor.transform.InverseTransformPoint(currentThicknessHandlePosition)).y;
                 floor.Generate();
+            }
+        }
+
+        private void Draw()
+        {
+            // Prevent handles when knot placement tool is selected
+            if (floor.GetComponent<SplineContainer>().Spline.Count < 2 || Tools.current == Tool.Custom)
+            {
+                return;
+            }
+
+            // Thickness handle
+            {
+                EditorGUI.BeginChangeCheck();
+                Vector3 currentThicknessHandlePosition = floor.centerPosition + floor.transform.TransformDirection(Vector3.up) * floor.thickness;
+                Vector3 newThicknessHandlePosition = Handles.Slider(currentThicknessHandlePosition, floor.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.x);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    floor.thickness += (floor.transform.InverseTransformPoint(newThicknessHandlePosition) - floor.transform.InverseTransformPoint(currentThicknessHandlePosition)).y;
+                    floor.Generate();
+                }
             }
         }
     }
