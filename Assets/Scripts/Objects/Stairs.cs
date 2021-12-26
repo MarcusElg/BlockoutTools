@@ -15,10 +15,12 @@ public class Stairs : MonoBehaviour
     // Properties
     public Type type;
     public float depth = 0.25f;
-    public float innerRadius = 0.25f;
+    public float innerRadius = 0.1f;
+    public bool rotateClockwise = true;
     public float width = 3;
     public float height = 0.25f;
     public Vector3 targetPosition = new Vector3(3, 1, 0);
+    public float targetRotation = 0f;
 
     public void Generate()
     {
@@ -30,15 +32,23 @@ public class Stairs : MonoBehaviour
     {
         // Validate properties
         depth = Mathf.Clamp(depth, 0.15f, 3f);
-        innerRadius = Mathf.Clamp(innerRadius, 0.1f, 1f);
+        innerRadius = Mathf.Clamp(innerRadius, 0f, 1f);
         width = Mathf.Clamp(width, 1f, 30f);
         height = Mathf.Clamp(height, 0.15f, 1f);
+        targetRotation = Mathf.Clamp(targetRotation, 0, 1800f); // 5 turns
 
         // Prevent scaling
         transform.localScale = Vector3.one;
 
         // Rotate object towards target
-        transform.rotation = Quaternion.LookRotation(Vector3Extensions.ToXZ(targetPosition));
+        if (type == Type.Straight)
+        {
+            transform.rotation = Quaternion.LookRotation(Vector3Extensions.ToXZ(targetPosition));
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
+        }
     }
 
     private void GenerateMesh()

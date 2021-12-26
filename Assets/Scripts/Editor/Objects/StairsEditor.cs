@@ -57,7 +57,16 @@ public class StairEditor : Editor
 
         stairs.width = EditorGUILayout.FloatField("Width", stairs.width);
         stairs.height = EditorGUILayout.FloatField("Height", stairs.height);
-        stairs.targetPosition = EditorGUILayout.Vector3Field(new GUIContent("Target Position", "Position for the stairs to generate towards in local space"), stairs.targetPosition);
+
+        if (stairs.type == Stairs.Type.Straight)
+        {
+            stairs.targetPosition = EditorGUILayout.Vector3Field(new GUIContent("Target Position", "Position for the stairs to generate towards in local space"), stairs.targetPosition);
+        }
+        else
+        {
+            stairs.rotateClockwise = EditorGUILayout.Toggle("Rotate Clockwise", stairs.rotateClockwise);
+            stairs.targetRotation = EditorGUILayout.FloatField("Target Rotation", stairs.targetRotation);
+        }
 
         if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
         {
@@ -69,6 +78,7 @@ public class StairEditor : Editor
     {
         // Dragging handles requires more than just draw event
         // Target position handle
+        if (stairs.type == Stairs.Type.Straight)
         {
             EditorGUI.BeginChangeCheck();
             Vector3 currentTargetHandlePosition = stairs.transform.position + stairs.targetPosition;
@@ -77,6 +87,18 @@ public class StairEditor : Editor
             if (EditorGUI.EndChangeCheck())
             {
                 stairs.targetPosition = newTargetHandlePosition - stairs.transform.position;
+                stairs.Generate();
+            }
+        }
+        else
+        {
+            // Rotation target handle
+            EditorGUI.BeginChangeCheck();
+            Quaternion rotation = Handles.Disc(Quaternion.Euler(0, stairs.transform.rotation.eulerAngles.y + stairs.targetRotation, 0), stairs.transform.position, stairs.transform.TransformDirection(Vector3.up), stairs.innerRadius + stairs.width, false, EditorSnapSettings.rotate);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                stairs.targetRotation = rotation.eulerAngles.y - stairs.transform.rotation.eulerAngles.y;
                 stairs.Generate();
             }
         }
@@ -112,6 +134,7 @@ public class StairEditor : Editor
 
         widthOffset = stairs.type == Stairs.Type.Straight ? 0 : stairs.width / 2 + stairs.innerRadius;
         // Depth handle
+        if (stairs.type == Stairs.Type.Straight)
         {
             EditorGUI.BeginChangeCheck();
             Vector3 depthHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height / 2 + Vector3.forward * stairs.depth + Vector3.right * widthOffset); // Convert to global space
@@ -136,7 +159,5 @@ public class StairEditor : Editor
                 stairs.Generate();
             }
         }
-
-        Handles.Disc(Quaternion.identity, stairs.transform.position, Vector3.up, 5, false, 1);
     }
 }
