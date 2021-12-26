@@ -34,13 +34,16 @@ namespace BlockoutTools
                 if (EditorGUI.EndChangeCheck())
                 {
                     Vector3 newLocalPosition = primitive.transform.InverseTransformPoint(newBoundsHandlePosition);
-                    float xScale = newLocalPosition.x / bounds.x * primitive.transform.localScale.x;
-                    float yScale = newLocalPosition.y / bounds.y * primitive.transform.localScale.y;
-                    float zScale = newLocalPosition.z / bounds.z * primitive.transform.localScale.z;
+                    // Only apply half of the scaling as the movement otherwise will make it scale twice as much in that direction
+                    float xScale = Mathf.Lerp(1, newLocalPosition.x / bounds.x, 0.5f) * primitive.transform.localScale.x;
+                    float yScale = Mathf.Lerp(1, newLocalPosition.y / bounds.y, 0.5f) * primitive.transform.localScale.y;
+                    float zScale = Mathf.Lerp(1, newLocalPosition.z / bounds.z, 0.5f) * primitive.transform.localScale.z;
 
-                    Vector3 movement = new Vector3(xScale - primitive.transform.localScale.x, yScale - primitive.transform.localScale.y, zScale - primitive.transform.localScale.z) / 2;
+                    Vector3 movement = new Vector3(xScale - primitive.transform.localScale.x, yScale - primitive.transform.localScale.y, zScale - primitive.transform.localScale.z);
+                    movement.Scale(bounds); // Scale with bounds to work the same regardless of bound size
                     primitive.transform.localScale = new Vector3(xScale, yScale, zScale);
                     primitive.transform.position += primitive.transform.rotation * movement;
+                    primitive.GetComponent<MeshFilter>().sharedMesh.RecalculateBounds();
                 }
             }
         }
