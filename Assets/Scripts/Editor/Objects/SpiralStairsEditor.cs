@@ -108,11 +108,24 @@ namespace BlockoutTools
             {
                 EditorGUI.BeginChangeCheck();
                 Vector3 heightHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.height + Vector3.right * widthOffset); // Convert to global space
-                heightHandlePosition = Handles.Slider(heightHandlePosition, stairs.transform.TransformDirection(Vector3.up), settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
+                heightHandlePosition = Handles.Slider(heightHandlePosition, Vector3.up, settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
 
                 if (EditorGUI.EndChangeCheck())
                 {
                     stairs.height = (stairs.transform.InverseTransformPoint(heightHandlePosition) - Vector3.right * widthOffset).magnitude; // Convert to local space
+                    stairs.Generate();
+                }
+            }
+
+            // Target height handle
+            {
+                EditorGUI.BeginChangeCheck();
+                Vector3 targetHeightHandlePosition = stairs.transform.TransformPoint(Vector3.up * stairs.targetHeight); // Convert to global space
+                targetHeightHandlePosition = Handles.Slider(targetHeightHandlePosition, Vector3.up, settings.FindProperty("gizmoSize").floatValue, CustomHandles.DiscCapFunction, EditorSnapSettings.move.y);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    stairs.targetHeight = (stairs.transform.InverseTransformPoint(targetHeightHandlePosition)).magnitude; // Convert to local space
                     stairs.Generate();
                 }
             }
