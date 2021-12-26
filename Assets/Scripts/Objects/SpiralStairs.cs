@@ -26,7 +26,7 @@ namespace BlockoutTools
         {
             // Validate properties
             innerRadius = Mathf.Clamp(innerRadius, 0f, 1f);
-            width = Mathf.Clamp(width, 1f, 30f);
+            width = Mathf.Clamp(width, 1f, 10f);
             height = Mathf.Clamp(height, 0.15f, 1f);
             targetHeight = Mathf.Clamp(targetHeight, 1f, 10f);
             targetRotation = Mathf.Clamp(targetRotation, 0, 1800f); // 5 turns
@@ -67,13 +67,13 @@ namespace BlockoutTools
             // Top part
             for (int i = 0; i < segments; i++)
             {
-                Vector3 currentPosition = Quaternion.Euler(0, currentRotation, 0) * Vector3.forward;
-                Vector3 nextPosition = Quaternion.Euler(0, currentRotation + rotation, 0) * Vector3.forward;
+                Vector3 currentPosition = Quaternion.Euler(0, currentRotation, 0) * Vector3.right;
+                Vector3 nextPosition = Quaternion.Euler(0, currentRotation + rotation, 0) * Vector3.right;
 
                 // Add start vertex .
                 if (i == 0)
                 {
-                    vertices.Add(Vector3.forward * width);
+                    vertices.Add(Vector3.right * width);
                 }
 
                 // Add top vertices :*
@@ -99,7 +99,7 @@ namespace BlockoutTools
             for (int i = segments - 1; i >= 0; i--)
             {
                 currentRotation -= rotation;
-                Vector3 nextPosition = Quaternion.Euler(0, currentRotation + rotation, 0) * Vector3.forward;
+                Vector3 nextPosition = Quaternion.Euler(0, currentRotation + rotation, 0) * Vector3.right;
 
                 vertices.Add(Vector3.up * height * i + nextPosition.normalized * width); // Bottom right vertex ::
 
