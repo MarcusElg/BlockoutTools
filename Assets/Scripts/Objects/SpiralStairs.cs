@@ -9,12 +9,12 @@ namespace BlockoutTools
     {
 
         // Properties
-        public float innerRadius = 0.1f;
+        public float innerRadius = 0.25f;
         public float width = 3;
         public bool rotateClockwise = true;
-        public float height;
-        public float targetHeight = 5f;
-        public float targetRotation = 0f;
+        public float height = 0.25f;
+        public float targetHeight = 3f;
+        public float targetRotation = 180f;
 
         public void Generate()
         {
@@ -29,7 +29,7 @@ namespace BlockoutTools
             width = Mathf.Clamp(width, 1f, 10f);
             height = Mathf.Clamp(height, 0.15f, 1f);
             targetHeight = Mathf.Clamp(targetHeight, 1f, 10f);
-            targetRotation = Mathf.Clamp(targetRotation, 0, 1800f); // 5 turns
+            targetRotation = Mathf.Clamp(targetRotation, 0, 1080); // 3 turns
 
             // Prevent scaling and rotation
             transform.localScale = Vector3.one;
