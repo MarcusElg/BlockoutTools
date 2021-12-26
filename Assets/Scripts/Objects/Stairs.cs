@@ -40,7 +40,7 @@ namespace BlockoutTools
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
 
-            int segments = (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / depth);
+            int segments = Mathf.Max(1, (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / depth));
             AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.left, 0); // Left side
             AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.right, segments * 3 + 1); // Right side
             MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces

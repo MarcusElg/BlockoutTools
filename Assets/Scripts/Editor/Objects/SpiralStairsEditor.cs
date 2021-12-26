@@ -53,6 +53,7 @@ namespace BlockoutTools
             stairs.width = EditorGUILayout.FloatField("Width", stairs.width);
             stairs.height = EditorGUILayout.FloatField("Height", stairs.height);
             stairs.rotateClockwise = EditorGUILayout.Toggle("Rotate Clockwise", stairs.rotateClockwise);
+            stairs.targetHeight = EditorGUILayout.FloatField("Target Height", stairs.targetHeight);
             stairs.targetRotation = EditorGUILayout.FloatField("Target Rotation", stairs.targetRotation);
 
             if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))

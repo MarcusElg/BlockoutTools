@@ -42,7 +42,7 @@ namespace BlockoutTools
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
 
-            int segments = (int)(targetHeight / height);
+            int segments = Mathf.Max(2, (int)(targetHeight / height));
             float actualHeight = targetHeight / segments;
             float rotation = targetRotation / segments;
 
