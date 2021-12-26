@@ -6,21 +6,11 @@ using UnityEngine;
 public class Stairs : MonoBehaviour
 {
 
-    public enum Type
-    {
-        Straight,
-        Spiral
-    }
-
     // Properties
-    public Type type;
     public float depth = 0.25f;
-    public float innerRadius = 0.1f;
-    public bool rotateClockwise = true;
     public float width = 3;
     public float height = 0.25f;
     public Vector3 targetPosition = new Vector3(3, 1, 0);
-    public float targetRotation = 0f;
 
     public void Generate()
     {
@@ -32,23 +22,14 @@ public class Stairs : MonoBehaviour
     {
         // Validate properties
         depth = Mathf.Clamp(depth, 0.15f, 3f);
-        innerRadius = Mathf.Clamp(innerRadius, 0f, 1f);
         width = Mathf.Clamp(width, 1f, 30f);
         height = Mathf.Clamp(height, 0.15f, 1f);
-        targetRotation = Mathf.Clamp(targetRotation, 0, 1800f); // 5 turns
 
         // Prevent scaling
         transform.localScale = Vector3.one;
 
         // Rotate object towards target
-        if (type == Type.Straight)
-        {
-            transform.rotation = Quaternion.LookRotation(Vector3Extensions.ToXZ(targetPosition));
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
-        }
+        transform.rotation = Quaternion.LookRotation(Vector3Extensions.ToXZ(targetPosition));
     }
 
     private void GenerateMesh()
@@ -58,14 +39,13 @@ public class Stairs : MonoBehaviour
         List<Vector2> uvs = new List<Vector2>();
 
         int segments = (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / depth);
-        float actualDepth = Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / segments;
-        AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualDepth, Vector3.left, 0); // Left side
-        AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualDepth, Vector3.right, segments * 3 + 1); // Right side
+        AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.left, 0); // Left side
+        AddStairSide(ref vertices, ref triangles, ref uvs, segments, Vector3.right, segments * 3 + 1); // Right side
         MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces
         MeshTools.CreateMesh(gameObject, vertices, triangles, uvs);
     }
 
-    private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, float actualDepth, Vector3 left, int offset)
+    private void AddStairSide(ref List<Vector3> vertices, ref List<int> triangles, ref List<Vector2> uvs, int segments, Vector3 left, int offset)
     {
         // Top part
         for (int i = 0; i < segments; i++)
@@ -77,8 +57,8 @@ public class Stairs : MonoBehaviour
             }
 
             // Add top vertices :*
-            vertices.Add(Vector3.forward * actualDepth * i + Vector3.up * height * (i + 1) + left * width / 2); // Top left
-            vertices.Add(Vector3.forward * actualDepth * (i + 1) + Vector3.up * height * (i + 1) + left * width / 2); // Top right
+            vertices.Add(Vector3.forward * depth * i + Vector3.up * height * (i + 1) + left * width / 2); // Top left
+            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * (i + 1) + left * width / 2); // Top right
 
             // Add uvs
             // Add start vertex
@@ -95,7 +75,7 @@ public class Stairs : MonoBehaviour
         // Bottom part
         for (int i = segments - 1; i >= 0; i--)
         {
-            vertices.Add(Vector3.forward * actualDepth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
+            vertices.Add(Vector3.forward * depth * (i + 1) + Vector3.up * height * i + left * width / 2); // Bottom right vertex ::
 
             if (offset == 0)
             {
