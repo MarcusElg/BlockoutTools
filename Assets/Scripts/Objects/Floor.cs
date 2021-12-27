@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Splines;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace BlockoutTools
 {
     [RequireComponent(typeof(SplineContainer), typeof(MeshRenderer), typeof(MeshFilter))]
@@ -43,6 +47,11 @@ namespace BlockoutTools
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
+
+            // Save changes
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
 
             // Don't try generate for less than 2 spline knots
             if (spline.Count < 2)

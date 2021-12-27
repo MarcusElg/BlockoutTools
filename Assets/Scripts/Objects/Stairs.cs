@@ -1,6 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace BlockoutTools
 {
@@ -39,6 +42,11 @@ namespace BlockoutTools
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
+
+            // Save changes
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
 
             int segments = Mathf.Max(1, (int)(Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / depth));
             float actualDepth = Vector3Extensions.XZDistance(Vector3.zero, targetPosition) / segments;
