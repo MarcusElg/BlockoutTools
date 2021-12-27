@@ -67,11 +67,27 @@ namespace BlockoutTools
             // Rotation target handle
             {
                 EditorGUI.BeginChangeCheck();
-                Quaternion rotation = Handles.Disc(Quaternion.Euler(0, stairs.transform.rotation.eulerAngles.y + stairs.targetRotation, 0), stairs.transform.position, stairs.transform.TransformDirection(Vector3.up), stairs.innerRadius + stairs.width, false, EditorSnapSettings.rotate);
+                Quaternion rotation = Handles.Disc(Quaternion.Euler(0, stairs.targetRotation, 0), stairs.transform.position, Vector3.up, stairs.innerRadius + stairs.width, false, EditorSnapSettings.rotate);
 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    stairs.targetRotation = rotation.eulerAngles.y - stairs.transform.rotation.eulerAngles.y;
+                    float angle = Quaternion.Angle(Quaternion.Euler(0, stairs.targetRotation, 0), Quaternion.Euler(0, rotation.eulerAngles.y, 0)); // Angle of change
+                    float cross = Vector3.Cross(Quaternion.Euler(0, stairs.targetRotation, 0) * Vector3.forward, Quaternion.Euler(0, rotation.eulerAngles.y, 0) * Vector3.forward).y;
+
+                    // Prevent snapping 180 degrees when rotating at rotation limits
+                    if ((stairs.targetRotation != -1080 && stairs.targetRotation != 1080) || angle < 5)
+                    {
+                        // Use cross product to determine direction of rotation
+                        if (cross >= 0)
+                        {
+                            stairs.targetRotation += angle;
+                        }
+                        else
+                        {
+                            stairs.targetRotation -= angle;
+                        }
+                    }
+
                     stairs.Generate();
                 }
             }
