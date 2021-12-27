@@ -22,6 +22,11 @@ namespace BlockoutTools
         {
             Validate();
             GenerateMesh();
+
+            // Save changes
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(this);
+#endif
         }
 
         public void Validate()
@@ -43,11 +48,6 @@ namespace BlockoutTools
             List<Vector3> vertices = new List<Vector3>();
             List<int> triangles = new List<int>();
             List<Vector2> uvs = new List<Vector2>();
-
-            // Save changes
-#if UNITY_EDITOR
-            EditorUtility.SetDirty(this);
-#endif
 
             int segments = Mathf.Max(2, (int)(targetHeight / height));
             float actualHeight = targetHeight / segments;
