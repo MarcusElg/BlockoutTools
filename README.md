@@ -29,3 +29,7 @@ A Unity editor tool for quickly creating blockouts for levels. Drag the various 
 ### Easily create a blockout for your level
 
 <img src="Readme/example.png" width="500"/>
+
+
+## Credits
+Included textures: https://www.kenney.nl/assets/prototype-textures
