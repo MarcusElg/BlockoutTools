@@ -52,13 +52,13 @@ namespace BlockoutTools
             stairs.innerRadius = EditorGUILayout.FloatField("Inner Radius", stairs.innerRadius);
             stairs.width = EditorGUILayout.FloatField("Width", stairs.width);
             stairs.height = EditorGUILayout.FloatField("Height", stairs.height);
-            stairs.rotateClockwise = EditorGUILayout.Toggle("Rotate Clockwise", stairs.rotateClockwise);
             stairs.targetHeight = EditorGUILayout.FloatField("Target Height", stairs.targetHeight);
-            stairs.targetRotation = EditorGUILayout.FloatField("Target Rotation", stairs.targetRotation);
+            stairs.targetRotation = EditorGUILayout.FloatField(new GUIContent("Target Rotation", "Positive value rotates clockwise whilst negative value rotates anti-clockwise"), stairs.targetRotation);
 
             if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
             {
                 stairs.Generate();
+                EditorUtility.SetDirty(stairs);
             }
         }
 

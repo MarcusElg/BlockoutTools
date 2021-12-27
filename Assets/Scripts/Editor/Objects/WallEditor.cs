@@ -66,6 +66,7 @@ namespace BlockoutTools
             if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
             {
                 wall.Generate();
+                EditorUtility.SetDirty(wall);
             }
         }
 

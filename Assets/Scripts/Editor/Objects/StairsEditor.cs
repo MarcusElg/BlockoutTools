@@ -57,6 +57,7 @@ namespace BlockoutTools
             if (EditorGUI.EndChangeCheck() || GUILayout.Button("Generate"))
             {
                 stairs.Generate();
+                EditorUtility.SetDirty(stairs);
             }
         }
 
