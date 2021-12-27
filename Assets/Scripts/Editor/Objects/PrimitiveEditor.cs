@@ -48,6 +48,7 @@ namespace BlockoutTools
 
                 Vector3 movement = new Vector3(xScale - primitive.transform.localScale.x, yScale - primitive.transform.localScale.y, zScale - primitive.transform.localScale.z);
                 movement.Scale(bounds); // Scale with bounds to work the same regardless of bound size
+                Undo.RecordObject(primitive.transform, "Scale Object");
                 primitive.transform.localScale = new Vector3(xScale, yScale, zScale);
                 primitive.transform.position += primitive.transform.rotation * movement;
             }
