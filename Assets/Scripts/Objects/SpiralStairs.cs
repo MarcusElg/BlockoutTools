@@ -11,7 +11,6 @@ namespace BlockoutTools
         // Properties
         public float innerRadius = 0.25f;
         public float width = 3;
-        public bool rotateClockwise = true;
         public float height = 0.25f;
         public float targetHeight = 3f;
         public float targetRotation = 180f;
@@ -29,7 +28,7 @@ namespace BlockoutTools
             width = Mathf.Clamp(width, 1f, 10f);
             height = Mathf.Clamp(height, 0.15f, 1f);
             targetHeight = Mathf.Clamp(targetHeight, 1f, 10f);
-            targetRotation = Mathf.Clamp(targetRotation, 0, 1080); // 3 turns
+            targetRotation = Mathf.Clamp(targetRotation, -1080, 1080); // 3 turns
 
             // Prevent scaling and rotation
             transform.localScale = Vector3.one;
@@ -47,15 +46,15 @@ namespace BlockoutTools
             float rotation = targetRotation / segments;
 
             // Flip rotation direction
-            if (rotateClockwise)
+            if (targetRotation >= 0)
             {
                 AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius + width, 0); // Outer side
                 AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius, segments * 3 + 1); // Inner side
             }
             else
             {
-                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, -rotation, innerRadius, 0); // Inner side 
-                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, -rotation, innerRadius + width, segments * 3 + 1); // Outer side      
+                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius, 0); // Inner side 
+                AddStairSide(ref vertices, ref triangles, ref uvs, segments, actualHeight, rotation, innerRadius + width, segments * 3 + 1); // Outer side      
             }
 
             MeshTools.ConnectToNextIteration(ref triangles, 0, 1, vertices.Count / 2); // Create top/bottom faces
