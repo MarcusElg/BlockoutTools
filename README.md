@@ -1,32 +1,31 @@
 # Blockout Tools
 
-![](Readme/preview.png)
-
+<img src="Readme/preview.png" width="500"/>
+  
 A Unity editor tool for quickly creating blockouts for levels. Drag the various handles to modify the different properties (or edit them in the inspector)
 
-#
 ## Features
 
 ### Stairs
 
-![](Readme/stairs.png)
+<img src="Readme/stairs.png" width="500"/>
 
 ### Spiral Stairs
 
-![](Readme/spiralstairs.png)
+<img src="Readme/spiralstairs.png" width="500"/>
 
 ### Walls
 
-![](Readme/wall.png)
+<img src="Readme/wall.png" width="500"/>
 
 ### Floors
 
-![](Readme/floor.png)
+<img src="Readme/floor.png" width="500"/>
 
 ### Primitives
 
-![](Readme/primitive.png)
+<img src="Readme/primitive.png" width="500"/>
 
 ### Easily create a blockout for your level
 
-![](Readme/example.png)
+<img src="Readme/example.png" width="500"/>
