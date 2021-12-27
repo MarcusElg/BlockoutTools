@@ -25,7 +25,7 @@ namespace BlockoutTools
         public void Validate()
         {
             // Validate properties
-            innerRadius = Mathf.Clamp(innerRadius, 0f, 1f);
+            innerRadius = Mathf.Clamp(innerRadius, 0f, 15f);
             width = Mathf.Clamp(width, 1f, 10f);
             height = Mathf.Clamp(height, 0.15f, 1f);
             targetHeight = Mathf.Clamp(targetHeight, 1f, 10f);
